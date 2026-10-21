@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Student File Organizer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #14122b;
+    --paper: #f6f5fb;
+    --violet: #5b4bff;
+    --mint: #2fd6a3;
+    --sun: #ffc84a;
+    --white: #ffffff;
+    --soft: #5f5c7d;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; background: var(--paper); color: var(--ink);
+    font: 16px/1.6 "DM Sans", system-ui, sans-serif;
+  }
+  a { color: inherit; }
+  a:focus-visible, button:focus-visible { outline: 3px solid var(--violet); outline-offset: 3px; }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+  h1, h2, h3 { font-family: "Bricolage Grotesque", "DM Sans", sans-serif; line-height: 1.05; margin: 0; }
+
+  /* top bar */
+  header.top { display: flex; justify-content: space-between; align-items: center; padding: 22px 0; }
+  .brand { font: 800 18px "Bricolage Grotesque", sans-serif; text-decoration: none; }
+  header.top nav { display: flex; gap: 22px; font-size: 15px; font-weight: 500; }
+  header.top nav a { text-decoration: none; }
+  header.top nav a:hover { text-decoration: underline; text-underline-offset: 5px; }
+  @media (max-width: 640px) { header.top nav { display: none; } }
+
+  /* hero */
+  .hero { display: grid; grid-template-columns: 1.05fr 1fr; gap: 48px; align-items: center; padding: 40px 0 72px; }
+  .hero h1 { font-size: clamp(40px, 6.4vw, 76px); letter-spacing: -0.03em; font-weight: 800; }
+  .hero p.lead { font-size: 19px; color: var(--soft); max-width: 30em; margin: 22px 0 28px; }
+  .btn {
+    display: inline-block; font: 700 15px "DM Sans", sans-serif; text-decoration: none; cursor: pointer;
+    background: var(--violet); color: var(--white); border: 2px solid var(--ink);
+    border-radius: 999px; padding: 12px 24px; box-shadow: 4px 4px 0 var(--ink);
+  }
+  .btn:hover { transform: translate(-1px, -1px); box-shadow: 5px 5px 0 var(--ink); }
+  .btn.alt { background: var(--white); color: var(--ink); }
+  .btns { display: flex; flex-wrap: wrap; gap: 14px; }
+  @media (max-width: 860px) { .hero { grid-template-columns: 1fr; padding-bottom: 48px; } }
+
+  /* the interactive window */
+  .win { background: var(--white); border: 2px solid var(--ink); border-radius: 12px; box-shadow: 10px 10px 0 var(--ink); overflow: hidden; }
+  .win .bar { display: flex; align-items: center; gap: 8px; padding: 10px 14px; border-bottom: 2px solid var(--ink); background: var(--sun); }
+  .win .bar i { width: 11px; height: 11px; border-radius: 50%; border: 2px solid var(--ink); background: var(--white); }
+  .win .bar span { margin-left: 8px; font-weight: 700; font-size: 14px; }
+  .files { list-style: none; margin: 0; padding: 8px 0; min-height: 250px; }
+  .files li { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 9px 16px; border-bottom: 1px solid #ebe9f6; font-size: 14.5px; }
+  .files li:last-child { border-bottom: 0; }
+  .files li span.name { overflow-wrap: anywhere; }
+  .tag { flex: none; font-size: 12px; font-weight: 700; padding: 2px 10px; border-radius: 999px; border: 2px solid var(--ink); background: var(--paper); color: var(--soft); }
+  .tag.Math { background: var(--violet); color: #fff; }
+  .tag.Science { background: var(--mint); }
+  .tag.English { background: var(--sun); }
+  .tag.Pictures { background: #ffb4c8; }
+  .tag.Slides { background: #b9d4ff; }
+  .win .foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 16px; border-top: 2px solid var(--ink); background: var(--paper); }
+  .win .foot small { color: var(--soft); }
+  .win .foot button { font: 700 14px "DM Sans", sans-serif; cursor: pointer; background: var(--violet); color: #fff; border: 2px solid var(--ink); border-radius: 8px; padding: 8px 18px; }
+
+  /* study tiles */
+  section { padding: 24px 0; }
+  .eyebrow-less { margin-bottom: 24px; }
+  .eyebrow-less h2 { font-size: clamp(30px, 4vw, 44px); letter-spacing: -0.02em; }
+  .eyebrow-less p { color: var(--soft); margin: 8px 0 0; }
+  .eyebrow-less p.prof { font-weight: 500; }
+  .eyebrow-less p.prof b { color: var(--ink); }
+  .bento { display: grid; grid-template-columns: repeat(6, 1fr); gap: 18px; }
+  .tile { border: 2px solid var(--ink); border-radius: 20px; padding: 26px; background: var(--white); }
+  .tile h3 { font-size: 24px; margin-bottom: 12px; }
+  .tile p { margin: 0 0 10px; }
+  .tile ul { margin: 0; padding-left: 20px; }
+  .tile li { margin: 4px 0; }
+  .s2 { grid-column: span 2; } .s3 { grid-column: span 3; } .s4 { grid-column: span 4; }
+  .t-sun { background: var(--sun); } .t-mint { background: var(--mint); }
+  .t-violet { background: var(--violet); color: #fff; } .t-ink { background: var(--ink); color: #fff; }
+  .t-ink a, .t-violet a { text-decoration-color: var(--sun); text-underline-offset: 4px; }
+  .big { font: 800 64px/1 "Bricolage Grotesque", sans-serif; display: block; margin: 8px 0 4px; }
+  @media (max-width: 860px) { .s2, .s3, .s4 { grid-column: span 6; } }
+
+  .bars { display: grid; gap: 16px; }
+  .bars .q { display: flex; justify-content: space-between; font-weight: 500; margin-bottom: 6px; gap: 12px; }
+  .bars .q b { font-family: "Bricolage Grotesque", sans-serif; font-size: 20px; }
+  .track { height: 16px; border: 2px solid var(--ink); border-radius: 999px; background: var(--paper); overflow: hidden; }
+  .track i { display: block; height: 100%; background: var(--violet); border-right: 2px solid var(--ink); }
+
+
+  .docs { display: grid; gap: 12px; margin-top: 14px; }
+  .doc {
+    display: flex; justify-content: space-between; align-items: center; gap: 16px;
+    padding: 14px 18px; border: 2px solid var(--ink); border-radius: 12px;
+    background: var(--paper); text-decoration: none; font-weight: 500;
+  }
+  .doc:hover { background: var(--sun); }
+  .doc small { display: block; font-weight: 400; color: var(--soft); }
+  .doc b { flex: none; font-size: 13px; border: 2px solid var(--ink); border-radius: 999px; padding: 2px 12px; background: #fff; }
+
+
+  .title-text { font: 700 clamp(22px, 3vw, 34px)/1.2 "Bricolage Grotesque", "DM Sans", sans-serif; margin: 0; letter-spacing: -0.01em; }
+  .tile.dl { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
+  .tile.dl h3 { margin-bottom: 4px; }
+  .tile.dl .big { margin: 0; }
+
+
+  /* divider between IS Research and IS Project Management */
+  .divider { display: flex; align-items: center; gap: 14px; margin: 88px 0 72px; }
+  .divider span { flex: 1; height: 0; border-top: 3px dashed var(--ink); opacity: .35; }
+  .divider i { display: block; width: 26px; height: 26px; border: 2px solid var(--ink); box-shadow: 3px 3px 0 var(--ink); }
+  .divider i:nth-of-type(1) { background: var(--sun); border-radius: 50%; }
+  .divider i:nth-of-type(2) { background: var(--violet); border-radius: 6px; transform: rotate(12deg); }
+  .divider i:nth-of-type(3) { background: var(--mint); border-radius: 999px; width: 44px; }
+
+
+  /* dropdown for the PM-I301-G5 folder */
+  details.group { border: 2px solid var(--ink); border-radius: 12px; background: var(--paper); }
+  details.group > summary.doc { border: 0; border-radius: 10px; cursor: pointer; list-style: none; background: transparent; }
+  details.group > summary::-webkit-details-marker { display: none; }
+  details.group > summary:hover { background: #e4e0ff; }
+  details.group .tog::before { content: "+"; }
+  details.group[open] .tog::before { content: "\2212"; }
+  details.group .tog { min-width: 38px; text-align: center; }
+  details.group .sub { display: grid; gap: 10px; padding: 4px 14px 14px; }
+
+  /* when opened: clearly different color */
+  details.group[open] { background: #d6d0ff; }
+  details.group[open] > summary.doc { background: var(--violet); color: #fff; border-radius: 10px 10px 0 0; }
+  details.group[open] > summary.doc small { color: #e4e0ff; }
+  details.group[open] > summary.doc:hover { background: #4a3bea; }
+  details.group[open] > .sub { padding-top: 14px; }
+  details.group .sub .doc { background: #fff; }
+  details.group .sub .doc:hover { background: #efecff; }
+
+  /* nested dropdown (Documentation) uses mint when opened */
+  details.group details.group { background: #fff; }
+  details.group details.group > summary:hover { background: #d9f7ec; }
+  details.group details.group[open] { background: #bff0dd; }
+  details.group details.group[open] > summary.doc { background: #1fa77f; color: #fff; }
+  details.group details.group[open] > summary.doc small { color: #e6fbf3; }
+  details.group details.group[open] > summary.doc:hover { background: #198f6d; }
+
+
+  .tag.Leader { background: var(--violet); color: #fff; }
+  .tag.Member { background: var(--mint); }
+  .files.team { min-height: 0; padding: 6px 0 10px; }
+  .files.team li { padding: 12px 18px; font-weight: 500; }
+
+  footer { padding: 56px 0 64px; color: var(--soft); font-size: 14px; }
+  footer a { color: var(--ink); }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .btn:hover { transform: none; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <a class="brand" href="#">Student File Organizer</a>
+    <nav aria-label="Sections">
+      <a href="#research">IS Research</a>
+      <a href="#pm">IS Project Management</a>
+    </nav>
+  </header>
+
+  <div class="hero">
+    <div>
+      <h1>ISR and PM</h1>
+      <p class="lead">Titles, documents, and deadlines for IS Research and IS Project Management.</p>
+      <div class="btns">
+        <a class="btn" href="#research">See IS Research</a>
+        <a class="btn alt" href="#pm">See IS Project Management</a>
+      </div>
+    </div>
+    <div class="win" aria-label="Group members">
+      <div class="bar"><i></i><i></i><i></i><span>Our group</span></div>
+      <ul class="files team">
+        <li><span class="name">Liyan Erich Turla</span><span class="tag Leader">Leader</span></li>
+        <li><span class="name">Christian L. Rizo Jose</span><span class="tag Member">Member</span></li>
+        <li><span class="name">Sheena Olazo</span><span class="tag Member">Member</span></li>
+        <li><span class="name">Justine Cunanan Pineda</span><span class="tag Member">Member</span></li>
+        <li><span class="name">Regine Montigo</span><span class="tag Member">Member</span></li>
+      </ul>
+    </div>
+
+    
+  </div>
+
+  <section id="research">
+    <div class="eyebrow-less">
+      <h2>IS Research</h2>
+      <p class="prof">Professor: <b>Vincent Ballevar</b></p>
+    </div>
+    <div class="bento">
+      <div class="tile approved t-sun" style="grid-column: span 6">
+        <h3>Approved title</h3>
+        <p class="title-text">Your approved research title goes here</p>
+      </div>
+
+      <div class="tile" style="grid-column: span 6">
+        <h3>Documents</h3>
+        <div class="docs">
+          <a class="doc" href="https://docs.google.com/document/d/1BBUPcpMPhkk7ZCc9fUc6sMbVCTyJ0tXhfSek4xOOc54/edit?tab=t.0" target="_blank" rel="noopener">
+            <span>Capstone titles<small>Google Docs</small></span><b>Open</b>
+          </a>
+          <details class="group">
+          <summary class="doc">
+            <span>Approved title<small>Google Drive folder, 3 documents inside</small></span><b class="tog" aria-hidden="true"></b>
+          </summary>
+          <div class="sub">
+            <a class="doc" href="https://drive.google.com/drive/folders/1dBV7LAFt3WR5IF7nORc1NXudCenkrpxc" target="_blank" rel="noopener">
+              <span>Approved title (main folder)<small>Google Drive folder</small></span><b>Open</b>
+            </a>
+            <a class="doc" href="https://docs.google.com/document/d/1NKy7S2e-7Ilfy8Q36rmsFe_NnnlodF4e5fkIgbfha3M/edit?usp=drive_web&amp;ouid=117351086484813994745" target="_blank" rel="noopener">
+              <span>Title 1<small>Google Docs</small></span><b>Open</b>
+            </a>
+            <a class="doc" href="https://docs.google.com/document/d/1wj1ynTAjCYF62IGcOSSV_2qHdEa_Ta_JaNGQ3TpCr7U/edit?tab=t.4zeyoytlwvlb" target="_blank" rel="noopener">
+              <span>Title 2<small>Google Docs</small></span><b>Open</b>
+            </a>
+            <a class="doc" href="https://docs.google.com/document/d/1c8SufrTigS0_nK1duKb5BSvmmoHJ9XF3noBGFbPah_o/edit?usp=drive_web&amp;ouid=117351086484813994745" target="_blank" rel="noopener">
+              <span>Title 3<small>Google Docs</small></span><b>Open</b>
+            </a>
+          </div>
+          </details>
+          <a class="doc" href="https://docs.google.com/document/d/1CPKFMiUiemPKnBz2Qdt0DvVt_rmgBzASaN3d2Xir9yo/edit?tab=t.0#heading=h.gjdgxs" target="_blank" rel="noopener">
+            <span>Template: data gathering / interview<small>Google Docs</small></span><b>Open</b>
+          </a>
+          <a class="doc" href="https://docs.google.com/spreadsheets/u/0/d/1SHNyX1u1Ex6uPDoC-W4cllaKY7QMwdt5/htmlview?urp=gmail_link" target="_blank" rel="noopener">
+            <span>Weekly payment tracker<small>Google Sheets</small></span><b>Open</b>
+          </a>
+        </div>
+      </div>
+
+      <div class="tile dl t-violet" style="grid-column: span 6" data-date="2027-01-04">
+        <div>
+          <h3>Title defense</h3>
+          <p style="margin:0" class="left"></p>
+        </div>
+        <span class="big">Jan 4</span>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider" aria-hidden="true"><span></span><i></i><i></i><i></i><span></span></div>
+
+  <section id="pm">
+    <div class="eyebrow-less">
+      <h2>IS Project Management</h2>
+      <p class="prof">Professor: <b>Jan Catherine Santiago</b></p>
+    </div>
+    <div class="bento">
+      <div class="tile approved t-mint" style="grid-column: span 6">
+        <h3>Approved title</h3>
+        <p class="title-text">Online Document Request and Tracking System for the CCA Registrar&rsquo;s Office</p>
+      </div>
+
+      <div class="tile" style="grid-column: span 6">
+        <h3>Documents</h3>
+        <div class="docs">
+          <details class="group">
+          <summary class="doc">
+            <span>PM-I301-G5<small>Google Drive folder, 7 sub-folders inside</small></span><b class="tog" aria-hidden="true"></b>
+          </summary>
+          <div class="sub">
+            <a class="doc" href="https://drive.google.com/drive/folders/1p5pwBsZE1LEsvKr3YJKSv-LU6e2kpgwk" target="_blank" rel="noopener">
+              <span>Main folder (PM-I301-G5)<small>Google Drive folder</small></span><b>Open</b>
+            </a>
+            <a class="doc" href="https://drive.google.com/drive/folders/1zzjj8-BFljvhT08W1TcQMcoaSGZErmlp" target="_blank" rel="noopener">
+              <span>System mock-up or interface design<small>Google Drive folder</small></span><b>Open</b>
+            </a>
+            <a class="doc" href="https://drive.google.com/drive/folders/1EX6to8oil4uzEQRDy-5xVOtCxoLhD4Qt" target="_blank" rel="noopener">
+              <span>PMIS workspace screenshot<small>Google Drive folder</small></span><b>Open</b>
+            </a>
+            <a class="doc" href="https://drive.google.com/drive/folders/1PVQGTvvfoBLK3aCUVww-a1XtV-rHmQYt" target="_blank" rel="noopener">
+              <span>Presentation slide<small>Google Drive folder</small></span><b>Open</b>
+            </a>
+            <a class="doc" href="https://drive.google.com/drive/folders/1GKy3BY6eLut4y5ihu99Kqy_JV1X03mU5" target="_blank" rel="noopener">
+              <span>Individual contribution report<small>Google Drive folder</small></span><b>Open</b>
+            </a>
+            <a class="doc" href="https://drive.google.com/drive/folders/1-CyttaFWtJaJD5b_lfQAsnCpX29Pjx6U" target="_blank" rel="noopener">
+              <span>Hardcopy / editable Word format<small>Google Drive folder</small></span><b>Open</b>
+            </a>
+
+            <a class="doc" href="https://docs.google.com/spreadsheets/d/1ybZuRVvWcTF2AFV0vVWj4jMDeDKUeGPr/edit?gid=1538493489#gid=1538493489" target="_blank" rel="noopener">
+              <span>Gantt chart<small>Google Drive folder</small></span><b>Open</b>
+            </a>
+            <details class="group">
+              <summary class="doc">
+                <span>Documentation<small>Google Drive folder, 2 images inside</small></span><b class="tog" aria-hidden="true"></b>
+              </summary>
+              <div class="sub">
+                <a class="doc" href="https://drive.google.com/drive/folders/1hqxuSI75vQXhubWkuwSJdzCoU12aBRo_" target="_blank" rel="noopener">
+                  <span>Documentation folder<small>Google Drive folder</small></span><b>Open</b>
+                </a>
+                <a class="doc" href="https://drive.google.com/drive/folders/1hqxuSI75vQXhubWkuwSJdzCoU12aBRo_" target="_blank" rel="noopener">
+                  <span>October 4<small>Image, opens the documentation folder for now</small></span><b>Open</b>
+                </a>
+                <a class="doc" href="https://drive.google.com/drive/folders/1hqxuSI75vQXhubWkuwSJdzCoU12aBRo_" target="_blank" rel="noopener">
+                  <span>October 3<small>Image, opens the documentation folder for now</small></span><b>Open</b>
+                </a>
+              </div>
+            </details>
+          </div>
+        </details>
+          <a class="doc" href="https://drive.google.com/file/d/1ZCb4bJwasBRQYZjlbrWd6GaqreJKjqVc/view?ts=6ac247bb" target="_blank" rel="noopener">
+            <span>Project proposal requirements<small>Google Drive file</small></span><b>Open</b>
+          </a>
+        </div>
+      </div>
+
+      <div class="tile dl t-ink" style="grid-column: span 6" data-date="2026-11-06">
+        <div>
+          <h3>Project proposal</h3>
+          <p style="margin:0" class="left"></p>
+        </div>
+        <span class="big">Nov 6</span>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    Contact: <a href="mailto:youremail@gmail.com">youremail@gmail.com</a> ·
+    <a href="https://facebook.com/your-name">Facebook</a> ·
+    <a href="https://github.com/RIZO-JOSE/ISR">GitHub</a>
+  </footer>
+</div>
+
+<script>
+  document.querySelectorAll("[data-date]").forEach(function (tile) {
+    var p = tile.dataset.date.split("-");
+    var due = new Date(+p[0], +p[1] - 1, +p[2]);
+    var now = new Date(); now.setHours(0, 0, 0, 0);
+    var days = Math.round((due - now) / 86400000);
+    var text = days > 1 ? days + " days left" : days === 1 ? "Tomorrow" : days === 0 ? "Today" : "Done";
+    tile.querySelector(".left").textContent = text;
+  });
+</script>
+</body>
+</html>
