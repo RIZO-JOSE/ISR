@@ -158,6 +158,19 @@
   footer { padding: 56px 0 64px; color: var(--soft); font-size: 14px; }
   footer a { color: var(--ink); }
   @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .btn:hover { transform: none; } }
+
+  /* mock-up image gallery */
+  .shots { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
+  .shot { all: unset; cursor: zoom-in; display: block; border: 2px solid var(--ink); border-radius: 12px; background: #fff; overflow: hidden; }
+  .shot:hover { box-shadow: 4px 4px 0 var(--ink); transform: translate(-1px, -1px); }
+  .shot:focus-visible { outline: 3px solid var(--violet); outline-offset: 3px; }
+  .shot img { display: block; width: 100%; aspect-ratio: 16 / 10; object-fit: cover; object-position: top; border-bottom: 2px solid var(--ink); }
+  .shot span { display: block; padding: 8px 12px; font-size: 14px; font-weight: 500; }
+  dialog.viewer { border: 2px solid var(--ink); border-radius: 14px; padding: 0; max-width: min(1100px, 94vw); background: #fff; box-shadow: 10px 10px 0 var(--ink); }
+  dialog.viewer::backdrop { background: rgba(20, 18, 43, .75); }
+  dialog.viewer img { display: block; max-width: 100%; max-height: 80vh; margin: 0 auto; }
+  dialog.viewer .cap { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 10px 16px; border-top: 2px solid var(--ink); background: var(--sun); font-weight: 700; }
+  dialog.viewer button { font: 700 14px "DM Sans", sans-serif; cursor: pointer; background: #fff; border: 2px solid var(--ink); border-radius: 8px; padding: 6px 16px; }
 </style>
 </head>
 <body>
@@ -190,8 +203,6 @@
         <li><span class="name">Regine Montigo</span><span class="tag Member">Member</span></li>
       </ul>
     </div>
-
-    
   </div>
 
   <section id="research">
@@ -273,6 +284,7 @@
             <a class="doc" href="https://drive.google.com/drive/folders/1p5pwBsZE1LEsvKr3YJKSv-LU6e2kpgwk" target="_blank" rel="noopener">
               <span>Main folder (PM-I301-G5)<small>Google Drive folder</small></span><b>Open</b>
             </a>
+
             <details class="group">
               <summary class="doc">
                 <span>System mock-up or interface design<small>Google Drive folder, Admin and Student UI/UX</small></span><b class="tog" aria-hidden="true"></b>
@@ -281,49 +293,38 @@
                 <a class="doc" href="https://drive.google.com/drive/folders/1zzjj8-BFljvhT08W1TcQMcoaSGZErmlp" target="_blank" rel="noopener">
                   <span>Mock-up main folder<small>Google Drive folder</small></span><b>Open</b>
                 </a>
+
                 <details class="group">
                   <summary class="doc">
-                    <span>Admin UI/UX<small>Separate folder, 4 screens</small></span><b class="tog" aria-hidden="true"></b>
+                    <span>Admin UI/UX<small>4 screens</small></span><b class="tog" aria-hidden="true"></b>
                   </summary>
                   <div class="sub">
-                    <a class="doc" href="https://drive.google.com/drive/folders/1Fx5gwldIw7st6K97eh66WTnXhyhYqU9_" target="_blank" rel="noopener">
-                      <span>Admin Dashboard<small>Image folder, Google Drive</small></span><b>Open</b>
-                    </a>
-                    <a class="doc" href="https://drive.google.com/drive/folders/1Fx5gwldIw7st6K97eh66WTnXhyhYqU9_" target="_blank" rel="noopener">
-                      <span>Admin Manage Requests<small>Image folder, Google Drive</small></span><b>Open</b>
-                    </a>
-                    <a class="doc" href="https://drive.google.com/drive/folders/1Fx5gwldIw7st6K97eh66WTnXhyhYqU9_" target="_blank" rel="noopener">
-                      <span>Admin Manage Reports<small>Image folder, Google Drive</small></span><b>Open</b>
-                    </a>
-                    <a class="doc" href="https://drive.google.com/drive/folders/1Fx5gwldIw7st6K97eh66WTnXhyhYqU9_" target="_blank" rel="noopener">
-                      <span>Admin Request Details<small>Image folder, Google Drive</small></span><b>Open</b>
-                    </a>
+                    <div class="shots">
+                      <button class="shot" data-full="images/admin/AdminDashboard.png"><img src="images/admin/AdminDashboard.png" alt="Admin Dashboard" loading="lazy"><span>Admin Dashboard</span></button>
+                      <button class="shot" data-full="images/admin/AdminManageRequests.png"><img src="images/admin/AdminManageRequests.png" alt="Admin Manage Requests" loading="lazy"><span>Admin Manage Requests</span></button>
+                      <button class="shot" data-full="images/admin/AdminRequestDetails.png"><img src="images/admin/AdminRequestDetails.png" alt="Admin Request Details" loading="lazy"><span>Admin Request Details</span></button>
+                      <button class="shot" data-full="images/admin/AdminRecordsReports.png"><img src="images/admin/AdminRecordsReports.png" alt="Admin Manage Reports" loading="lazy"><span>Admin Manage Reports</span></button>
+                    </div>
                   </div>
                 </details>
+
                 <details class="group">
                   <summary class="doc">
-                    <span>Student UI/UX<small>Separate folder, 5 screens</small></span><b class="tog" aria-hidden="true"></b>
+                    <span>Student UI/UX<small>5 screens</small></span><b class="tog" aria-hidden="true"></b>
                   </summary>
                   <div class="sub">
-                    <a class="doc" href="https://drive.google.com/drive/folders/1Fx5gwldIw7st6K97eh66WTnXhyhYqU9_" target="_blank" rel="noopener">
-                      <span>Student Dashboard<small>Image folder, Google Drive</small></span><b>Open</b>
-                    </a>
-                    <a class="doc" href="https://drive.google.com/drive/folders/1Fx5gwldIw7st6K97eh66WTnXhyhYqU9_" target="_blank" rel="noopener">
-                      <span>Student Login and Registration<small>Image folder, Google Drive</small></span><b>Open</b>
-                    </a>
-                    <a class="doc" href="https://drive.google.com/drive/folders/1Fx5gwldIw7st6K97eh66WTnXhyhYqU9_" target="_blank" rel="noopener">
-                      <span>Student My Request Tracking<small>Image folder, Google Drive</small></span><b>Open</b>
-                    </a>
-                    <a class="doc" href="https://drive.google.com/drive/folders/1Fx5gwldIw7st6K97eh66WTnXhyhYqU9_" target="_blank" rel="noopener">
-                      <span>Student Notification and Profile<small>Image folder, Google Drive</small></span><b>Open</b>
-                    </a>
-                    <a class="doc" href="https://drive.google.com/drive/folders/1Fx5gwldIw7st6K97eh66WTnXhyhYqU9_" target="_blank" rel="noopener">
-                      <span>Student Document Request<small>Image folder, Google Drive</small></span><b>Open</b>
-                    </a>
+                    <div class="shots">
+                      <button class="shot" data-full="images/student/StudentLoginRegistration.png"><img src="images/student/StudentLoginRegistration.png" alt="Student Login and Registration" loading="lazy"><span>Student Login and Registration</span></button>
+                      <button class="shot" data-full="images/student/StudentDashboard.png"><img src="images/student/StudentDashboard.png" alt="Student Dashboard" loading="lazy"><span>Student Dashboard</span></button>
+                      <button class="shot" data-full="images/student/StudentRequestaDocument.png"><img src="images/student/StudentRequestaDocument.png" alt="Student Document Request" loading="lazy"><span>Student Document Request</span></button>
+                      <button class="shot" data-full="images/student/StudentMyRequestsTracking.png"><img src="images/student/StudentMyRequestsTracking.png" alt="Student My Request Tracking" loading="lazy"><span>Student My Request Tracking</span></button>
+                      <button class="shot" data-full="images/student/StudentNotificationsProfile.png"><img src="images/student/StudentNotificationsProfile.png" alt="Student Notification and Profile" loading="lazy"><span>Student Notification and Profile</span></button>
+                    </div>
                   </div>
                 </details>
               </div>
             </details>
+
             <a class="doc" href="https://drive.google.com/drive/folders/1EX6to8oil4uzEQRDy-5xVOtCxoLhD4Qt" target="_blank" rel="noopener">
               <span>PMIS workspace screenshot<small>Google Drive folder</small></span><b>Open</b>
             </a>
@@ -336,7 +337,6 @@
             <a class="doc" href="https://drive.google.com/drive/folders/1-CyttaFWtJaJD5b_lfQAsnCpX29Pjx6U" target="_blank" rel="noopener">
               <span>Hardcopy / editable Word format<small>Google Drive folder</small></span><b>Open</b>
             </a>
-
             <a class="doc" href="https://docs.google.com/spreadsheets/d/1Uc2S8EDktIIxRKF2vxFpMxGR7av36C_6/edit?gid=1299757669#gid=1299757669" target="_blank" rel="noopener">
               <span>Gantt Chart<small>Google Drive folder</small></span><b>Open</b>
             </a>
@@ -357,7 +357,7 @@
               </div>
             </details>
           </div>
-        </details>
+          </details>
           <a class="doc" href="https://drive.google.com/file/d/1ZCb4bJwasBRQYZjlbrWd6GaqreJKjqVc/view?ts=6ac247bb" target="_blank" rel="noopener">
             <span>Project Proposal Requirements<small>Google Drive file</small></span><b>Open</b>
           </a>
@@ -381,6 +381,11 @@
   </footer>
 </div>
 
+<dialog class="viewer" id="viewer">
+  <img id="viewerImg" alt="">
+  <div class="cap"><span id="viewerCap"></span><button type="button" id="viewerClose">Close</button></div>
+</dialog>
+
 <script>
   document.querySelectorAll("[data-date]").forEach(function (tile) {
     var p = tile.dataset.date.split("-");
@@ -390,6 +395,19 @@
     var text = days > 1 ? days + " days left" : days === 1 ? "Tomorrow" : days === 0 ? "Today" : "Done";
     tile.querySelector(".left").textContent = text;
   });
+
+  var viewer = document.getElementById("viewer");
+  document.querySelectorAll(".shot").forEach(function (b) {
+    b.addEventListener("click", function () {
+      var label = b.querySelector("span").textContent;
+      document.getElementById("viewerImg").src = b.dataset.full;
+      document.getElementById("viewerImg").alt = label;
+      document.getElementById("viewerCap").textContent = label;
+      viewer.showModal();
+    });
+  });
+  document.getElementById("viewerClose").addEventListener("click", function () { viewer.close(); });
+  viewer.addEventListener("click", function (e) { if (e.target === viewer) viewer.close(); });
 </script>
 </body>
 </html>
